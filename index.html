@@ -17,7 +17,7 @@ button{font:inherit;font-weight:600;cursor:pointer;border:0;border-radius:12px;p
 button:active{transform:scale(.95)}
 button.pri{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;box-shadow:0 4px 12px rgba(91,75,245,.35)}
 button.del{color:var(--red)}
-main{padding:18px 16px 40px;max-width:900px;margin:auto}
+main{padding:18px 16px 90px;max-width:900px;margin:auto}
 input[type=text],input[type=search],input[type=url]{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--text);font:inherit;margin-top:6px}
 input:focus{outline:2px solid var(--pri);border-color:transparent}
 #q{border-radius:999px;padding:13px 20px;box-shadow:var(--shadow);border:0;margin:0}
@@ -74,6 +74,12 @@ body.glass .ic.ph{border:0}
 body.glass .about h4{color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.4)}
 body.glass dialog{background:rgba(35,30,70,.72);-webkit-backdrop-filter:blur(24px) saturate(1.4);backdrop-filter:blur(24px) saturate(1.4);border:1px solid rgba(255,255,255,.25);color:#fff}
 body.glass input[type=text],body.glass input[type=url],body.glass input[type=search]{border:1px solid var(--line)}
+#tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;background:var(--card);border-top:1px solid var(--line);padding:6px 8px max(6px,env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(40,40,90,.08)}
+#tabs button{flex:1;background:none;box-shadow:none;border-radius:12px;padding:8px 4px;font-size:12px;color:var(--sub);display:flex;flex-direction:column;align-items:center;gap:2px}
+#tabs button b{font-size:19px;line-height:1}
+#tabs button.on{color:var(--pri)}
+body.glass #tabs{-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5)}
+body.glass #tabs button.on{color:#fff;background:rgba(255,255,255,.25)}
 </style>
 </head>
 <body>
@@ -96,8 +102,6 @@ body.glass input[type=text],body.glass input[type=url],body.glass input[type=sea
       <button id="restore">রিস্টোর (পেস্ট)</button>
       <button id="aboutBtn">ℹ About</button>
     </div>
-    <label class="opt"><input type="checkbox" id="same"> সাইট অ্যাপের ভেতরেই খুলুন (বন্ধ থাকলে নতুন ট্যাবে খুলবে)</label>
-    <label class="opt"><input type="checkbox" id="glass"> ✨ গ্লাস ডিজাইন (কাচের মতো স্বচ্ছ)</label>
     <div class="opt" style="display:block"><div style="font-weight:600;margin-bottom:10px">🎨 ব্যাকগ্রাউন্ড</div><div id="swatches" class="sw"></div><div class="bar" style="margin:12px 0 0"><button id="bgPick">🖼 গ্যালারি থেকে ছবি</button><input type="file" id="bgFile" accept="image/*" hidden></div></div>
     <div id="setList"></div>
   </section>
@@ -130,6 +134,12 @@ body.glass input[type=text],body.glass input[type=url],body.glass input[type=sea
   </section>
 </main>
 
+<nav id="tabs">
+  <button data-v="home"><b>🏠</b>হোম</button>
+  <button data-v="settings"><b>⚙</b>Settings</button>
+  <button data-v="about"><b>ℹ</b>About</button>
+</nav>
+
 <dialog id="dlg">
   <b id="dlgTitle"></b>
   <label>Website URL<input type="url" id="fUrl" placeholder="facebook.com"></label>
@@ -154,6 +164,7 @@ let sites = [];
 try { sites = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
 let opts = { same: true, glass: true, bg: 0 };
 try { Object.assign(opts, JSON.parse(localStorage.getItem(KEY + '_opts') || '{}')); } catch (e) {}
+opts.same = true; opts.glass = true;
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(sites)); } catch (e) { alert('সংরক্ষণ করা যায়নি'); } };
 
 const $ = id => document.getElementById(id);
@@ -316,6 +327,7 @@ function show(v, push = true) {
   if (push && v !== 'home') { if (view === 'home') history.pushState({ v }, ''); else history.replaceState({ v }, ''); }
   view = v;
   ['home', 'settings', 'about'].forEach(x => $(x).classList.toggle('hidden', x !== v));
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
   $('toggle').textContent = v === 'home' ? '⚙ Settings' : '← Home';
   $('title').textContent = v === 'home' ? 'My Web Apps' : v === 'settings' ? 'Settings' : 'About';
 }
@@ -326,12 +338,13 @@ $('toggle').onclick = () => {
   else show('home', false);
 };
 $('aboutBtn').onclick = () => show('about');
-$('same').checked = opts.same;
-$('same').onchange = () => {
-  opts.same = $('same').checked;
-  try { localStorage.setItem(KEY + '_opts', JSON.stringify(opts)); } catch (e) {}
-  renderHome();
-};
+document.querySelectorAll('#tabs button').forEach(b => b.onclick = () => {
+  const v = b.dataset.v;
+  if (v === view) return;
+  if (v !== 'home') show(v);
+  else if (history.state && history.state.v) history.back();
+  else show('home', false);
+});
 $('q').oninput = renderHome;
 
 
@@ -372,8 +385,6 @@ function applyBg() {
     sw.appendChild(e);
   }
 }
-$('glass').checked = !!opts.glass;
-$('glass').onchange = () => { opts.glass = $('glass').checked; saveOpts(); applyBg(); };
 $('bgPick').onclick = () => $('bgFile').click();
 $('bgFile').onchange = e => {
   const f = e.target.files[0];
@@ -388,7 +399,7 @@ $('bgFile').onchange = e => {
       c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
       bgImg = c.toDataURL('image/jpeg', 0.72);
       try { localStorage.setItem(KEY + '_bg', bgImg); } catch (x) { alert('ছবিটা সংরক্ষণ করা যায়নি, ছোট ছবি বাছুন'); }
-      opts.glass = true; $('glass').checked = true;
+      opts.glass = true;
       opts.bg = 'img'; saveOpts(); applyBg();
     };
     im.src = r.result;
@@ -398,6 +409,7 @@ $('bgFile').onchange = e => {
 applyBg();
 
 renderAll();
+show('home', false);
 </script>
 </body>
 </html>
