@@ -4,39 +4,80 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>My Web Apps</title>
+<meta name="theme-color" content="#5b4bf5">
 <style>
-:root{--bg:#f5f6fa;--card:#fff;--text:#1d1f27;--sub:#6b7280;--pri:#4f46e5;--line:#e5e7eb;--red:#dc2626}
-@media (prefers-color-scheme:dark){:root{--bg:#14151a;--card:#1f2128;--text:#eceef4;--sub:#9aa0ae;--pri:#818cf8;--line:#2e313b;--red:#f87171}}
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--text)}
-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
-header h1{font-size:18px;margin:0}
-button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:8px 14px;background:var(--line);color:var(--text)}
-button.pri{background:var(--pri);color:#fff}
+:root{--bg:#f4f5fb;--card:#fff;--text:#171a26;--sub:#6a7083;--pri:#5b4bf5;--pri2:#8a5cf6;--line:#e7e9f3;--red:#e5484d;--shadow:0 4px 16px rgba(40,40,90,.08)}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1016;--card:#1a1c26;--text:#eef0f7;--sub:#9aa1b4;--pri:#8b7dff;--pri2:#b07cff;--line:#2a2d3a;--red:#ff6b70;--shadow:0 4px 16px rgba(0,0,0,.35)}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+header{display:flex;align-items:center;justify-content:space-between;padding:max(16px,env(safe-area-inset-top)) 18px 20px;background:linear-gradient(135deg,#5b4bf5,#8a5cf6);color:#fff;border-radius:0 0 26px 26px;position:sticky;top:0;z-index:5;box-shadow:0 6px 20px rgba(91,75,245,.3)}
+header h1{font-size:20px;margin:0;letter-spacing:.2px}
+header button{background:rgba(255,255,255,.2);color:#fff;backdrop-filter:blur(6px)}
+button{font:inherit;font-weight:600;cursor:pointer;border:0;border-radius:12px;padding:9px 14px;background:var(--line);color:var(--text);transition:transform .15s,opacity .15s}
+button:active{transform:scale(.95)}
+button.pri{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;box-shadow:0 4px 12px rgba(91,75,245,.35)}
 button.del{color:var(--red)}
-main{padding:16px;max-width:900px;margin:auto}
-input[type=text],input[type=search],input[type=url]{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--text);font:inherit;margin-top:6px}
-h3{margin:18px 0 8px;font-size:14px;color:var(--sub)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:16px 10px}
-.tile{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--text);font-size:12px;gap:6px;text-align:center;-webkit-user-select:none;user-select:none}
+main{padding:18px 16px 40px;max-width:900px;margin:auto}
+input[type=text],input[type=search],input[type=url]{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--text);font:inherit;margin-top:6px}
+input:focus{outline:2px solid var(--pri);border-color:transparent}
+#q{border-radius:999px;padding:13px 20px;box-shadow:var(--shadow);border:0;margin:0}
+h3{display:flex;align-items:center;gap:8px;margin:24px 0 12px;font-size:13px;letter-spacing:.5px;color:var(--sub)}
+h3::before{content:'';width:4px;height:14px;border-radius:2px;background:linear-gradient(var(--pri),var(--pri2))}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:18px 8px;margin-top:18px}
+h3+.grid{margin-top:0}
+.tile{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--text);font-size:12px;font-weight:500;gap:8px;text-align:center;-webkit-user-select:none;user-select:none;padding:6px 2px;border-radius:16px;transition:transform .15s;animation:pop .3s both}
+.tile:active{transform:scale(.92)}
 .tile span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ic{width:60px;height:60px;border-radius:15px;background:var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;font-weight:700;font-size:26px;flex:none}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.96)}}
+.ic{width:62px;height:62px;border-radius:18px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;overflow:hidden;font-weight:700;font-size:26px;flex:none}
 .ic img{width:100%;height:100%;object-fit:cover}
-.empty{text-align:center;color:var(--sub);padding:60px 20px;line-height:1.8}
-.row{display:flex;align-items:center;gap:10px;background:var(--card);padding:10px;border-radius:12px;margin-bottom:8px}
-.row .ic{width:42px;height:42px;font-size:18px;border-radius:11px}
+.ic.ph{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;border:0}
+.empty{text-align:center;color:var(--sub);padding:70px 20px;line-height:1.9}
+.empty::before{content:'🌐';display:block;font-size:52px;margin-bottom:8px}
+.row{display:flex;align-items:center;gap:10px;background:var(--card);padding:10px 10px 10px 12px;border-radius:18px;margin-bottom:10px;box-shadow:var(--shadow);animation:pop .3s both}
+.row .ic{width:44px;height:44px;font-size:18px;border-radius:13px;box-shadow:none}
 .row .meta{flex:1;min-width:0}
 .row .meta b,.row .meta small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.row small{color:var(--sub)}
-.bar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
-dialog{border:0;border-radius:16px;padding:18px;width:min(92vw,400px);background:var(--card);color:var(--text)}
-dialog::backdrop{background:rgba(0,0,0,.5)}
-label{display:block;font-size:13px;color:var(--sub);margin-top:10px}
-.acts{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.row small{color:var(--sub);margin-top:2px}
+.row button{padding:7px 9px;font-size:14px;background:var(--bg)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+dialog{border:0;border-radius:24px;padding:22px;width:min(92vw,400px);background:var(--card);color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog[open]{animation:pop .2s both}
+dialog::backdrop{background:rgba(10,10,25,.55);backdrop-filter:blur(3px)}
+dialog b{font-size:17px}
+label{display:block;font-size:13px;font-weight:600;color:var(--sub);margin-top:12px}
+.acts{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
 .hidden{display:none}
+.about{background:var(--card);border-radius:22px;padding:24px 20px;line-height:1.8;box-shadow:var(--shadow)}
+.about h2{margin:0 0 2px;text-align:center}
+.about h4{margin:20px 0 6px;color:var(--pri)}
+.about ul{margin:0;padding-left:20px}
+.about .logo{width:88px;height:88px;margin:0 auto 12px;font-size:44px;border-radius:24px;background:linear-gradient(135deg,#5b4bf5,#8a5cf6);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(91,75,245,.4)}
+.opt{display:flex;align-items:center;gap:10px;background:var(--card);padding:12px 14px;border-radius:16px;margin-bottom:14px;font-size:14px;font-weight:500;color:var(--text);box-shadow:var(--shadow)}
+.opt input{width:20px;height:20px;accent-color:var(--pri);flex:none}
+
+::placeholder{color:var(--sub);opacity:.85}
+#bgLayer{position:fixed;inset:0;z-index:-1;display:none}
+.sw{display:flex;gap:10px;flex-wrap:wrap}
+.sw i{width:38px;height:38px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .15s}
+.sw i:active{transform:scale(.9)}
+.sw i.on{border-color:#fff;box-shadow:0 0 0 3px var(--pri)}
+body.glass{--text:#fff;--sub:rgba(255,255,255,.8);--card:rgba(255,255,255,.16);--line:rgba(255,255,255,.3);--shadow:0 8px 24px rgba(0,0,0,.18);background:transparent;color:#fff}
+body.glass header{background:rgba(255,255,255,.14);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);box-shadow:none;border-bottom:1px solid var(--line)}
+body.glass .row,body.glass .opt,body.glass .about,body.glass #q,body.glass .ic{-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);border:1px solid var(--line)}
+body.glass .tile span,body.glass h3,body.glass .empty{text-shadow:0 1px 4px rgba(0,0,0,.35)}
+body.glass button{background:rgba(255,255,255,.2);color:#fff}
+body.glass button.pri{background:linear-gradient(135deg,var(--pri),var(--pri2))}
+body.glass button.del{color:#ffb4b7}
+body.glass .row button{background:rgba(255,255,255,.18)}
+body.glass .ic.ph{border:0}
+body.glass .about h4{color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.4)}
+body.glass dialog{background:rgba(35,30,70,.72);-webkit-backdrop-filter:blur(24px) saturate(1.4);backdrop-filter:blur(24px) saturate(1.4);border:1px solid rgba(255,255,255,.25);color:#fff}
+body.glass input[type=text],body.glass input[type=url],body.glass input[type=search]{border:1px solid var(--line)}
 </style>
 </head>
 <body>
+<div id="bgLayer"></div>
 <header>
   <h1 id="title">My Web Apps</h1>
   <button id="toggle">⚙ Settings</button>
@@ -53,8 +94,39 @@ label{display:block;font-size:13px;color:var(--sub);margin-top:10px}
       <button class="pri" id="add">＋ URL যুক্ত করুন</button>
       <button id="backup">ব্যাকআপ (কপি)</button>
       <button id="restore">রিস্টোর (পেস্ট)</button>
+      <button id="aboutBtn">ℹ About</button>
     </div>
+    <label class="opt"><input type="checkbox" id="same"> সাইট অ্যাপের ভেতরেই খুলুন (বন্ধ থাকলে নতুন ট্যাবে খুলবে)</label>
+    <label class="opt"><input type="checkbox" id="glass"> ✨ গ্লাস ডিজাইন (কাচের মতো স্বচ্ছ)</label>
+    <div class="opt" style="display:block"><div style="font-weight:600;margin-bottom:10px">🎨 ব্যাকগ্রাউন্ড</div><div id="swatches" class="sw"></div><div class="bar" style="margin:12px 0 0"><button id="bgPick">🖼 গ্যালারি থেকে ছবি</button><input type="file" id="bgFile" accept="image/*" hidden></div></div>
     <div id="setList"></div>
+  </section>
+
+  <section id="about" class="hidden">
+    <div class="about">
+      <div class="logo">▦</div>
+      <h2>My Web Apps</h2>
+      <div style="text-align:center;color:var(--sub)">ভার্সন 1.0.0</div>
+      <p>পছন্দের সব ওয়েবসাইট এক জায়গায়। আলাদা অ্যাপ ইনস্টল না করে Facebook, YouTube, WhatsApp, Gmail সহ যেকোনো সাইট আলাদা অ্যাপের মতো ব্যবহার করুন।</p>
+      <h4>কীভাবে ব্যবহার করবেন</h4>
+      <ul>
+        <li>⚙ Settings-এ গিয়ে "URL যুক্ত করুন" চাপুন।</li>
+        <li>সাইটের ঠিকানা লিখুন, যেমন facebook.com।</li>
+        <li>আইকন নিজে থেকে হোম পেজে যুক্ত হবে।</li>
+        <li>আইকনে চাপলে সাইট খুলবে। ফিরে আসতে ফোনের Back বাটন চাপুন।</li>
+        <li>আইকন চেপে ধরলে নাম, ছবি বা গ্রুপ বদলানো ও মুছে ফেলা যায়।</li>
+      </ul>
+      <h4>ফিচার</h4>
+      <ul>
+        <li>যত খুশি ওয়েবসাইট যুক্ত করা</li>
+        <li>গ্যালারি থেকে আইকনের ছবি বাছাই</li>
+        <li>গ্রুপ, সার্চ আর ▲▼ দিয়ে ক্রম বদলানো</li>
+        <li>ব্যাকআপ ও রিস্টোর</li>
+        <li>ডেটা সংরক্ষিত থাকে, অ্যাপ বন্ধ করে খুললেও</li>
+      </ul>
+      <h4>গোপনীয়তা</h4>
+      <p>আপনার সাইটের তালিকা শুধু এই ফোনেই সংরক্ষিত থাকে। অ্যাপ আপনার পাসওয়ার্ড বা লগইন তথ্য সংগ্রহ করে না। আইকন আনতে সাইটের নাম (ডোমেইন) Google-এর ফেভিকন সার্ভিসে পাঠানো হয়।</p>
+    </div>
   </section>
 </main>
 
@@ -80,6 +152,8 @@ label{display:block;font-size:13px;color:var(--sub);margin-top:10px}
 const KEY = 'my_web_apps_v1';
 let sites = [];
 try { sites = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
+let opts = { same: true, glass: true, bg: 0 };
+try { Object.assign(opts, JSON.parse(localStorage.getItem(KEY + '_opts') || '{}')); } catch (e) {}
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(sites)); } catch (e) { alert('সংরক্ষণ করা যায়নি'); } };
 
 const $ = id => document.getElementById(id);
@@ -90,7 +164,7 @@ const favUrl = s => s.img || 'https://www.google.com/s2/favicons?domain=' + host
 function icon(s) {
   const d = document.createElement('div');
   d.className = 'ic';
-  const letter = () => { d.textContent = (s.name || '?')[0].toUpperCase(); };
+  const letter = () => { d.classList.add('ph'); d.textContent = (s.name || '?')[0].toUpperCase(); };
   const im = document.createElement('img');
   im.alt = '';
   im.onerror = () => { im.remove(); letter(); };
@@ -118,8 +192,7 @@ function renderHome() {
       const a = document.createElement('a');
       a.className = 'tile';
       a.href = s.url;
-      a.target = '_blank';
-      a.rel = 'noopener';
+      if (!opts.same) { a.target = '_blank'; a.rel = 'noopener'; }
       a.appendChild(icon(s));
       const n = document.createElement('span');
       n.textContent = s.name;
@@ -238,15 +311,91 @@ $('restore').onclick = () => {
 };
 
 // ভিউ বদল
-let inSet = false;
+let view = 'home';
+function show(v, push = true) {
+  if (push && v !== 'home') { if (view === 'home') history.pushState({ v }, ''); else history.replaceState({ v }, ''); }
+  view = v;
+  ['home', 'settings', 'about'].forEach(x => $(x).classList.toggle('hidden', x !== v));
+  $('toggle').textContent = v === 'home' ? '⚙ Settings' : '← Home';
+  $('title').textContent = v === 'home' ? 'My Web Apps' : v === 'settings' ? 'Settings' : 'About';
+}
+window.addEventListener('popstate', () => show('home', false));
 $('toggle').onclick = () => {
-  inSet = !inSet;
-  $('home').classList.toggle('hidden', inSet);
-  $('settings').classList.toggle('hidden', !inSet);
-  $('toggle').textContent = inSet ? '← Home' : '⚙ Settings';
-  $('title').textContent = inSet ? 'Settings' : 'My Web Apps';
+  if (view === 'home') show('settings');
+  else if (history.state && history.state.v) history.back();
+  else show('home', false);
+};
+$('aboutBtn').onclick = () => show('about');
+$('same').checked = opts.same;
+$('same').onchange = () => {
+  opts.same = $('same').checked;
+  try { localStorage.setItem(KEY + '_opts', JSON.stringify(opts)); } catch (e) {}
+  renderHome();
 };
 $('q').oninput = renderHome;
+
+
+// গ্লাস ও ব্যাকগ্রাউন্ড
+const GRADS = [
+  'linear-gradient(135deg,#667eea,#764ba2)',
+  'linear-gradient(135deg,#f093fb,#f5576c)',
+  'linear-gradient(135deg,#4facfe,#00c6fb)',
+  'linear-gradient(135deg,#11998e,#38ef7d)',
+  'linear-gradient(135deg,#fa709a,#fda085)',
+  'linear-gradient(135deg,#0f2027,#2c5364)',
+  'linear-gradient(135deg,#232526,#414345)'
+];
+let bgImg = '';
+try { bgImg = localStorage.getItem(KEY + '_bg') || ''; } catch (e) {}
+const saveOpts = () => { try { localStorage.setItem(KEY + '_opts', JSON.stringify(opts)); } catch (e) {} };
+function applyBg() {
+  document.body.classList.toggle('glass', !!opts.glass);
+  const L = $('bgLayer');
+  L.style.display = opts.glass ? 'block' : 'none';
+  L.style.background = (opts.bg === 'img' && bgImg)
+    ? 'linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,.28)),url("' + bgImg + '") center/cover no-repeat'
+    : (GRADS[opts.bg] || GRADS[0]);
+  const sw = $('swatches');
+  sw.innerHTML = '';
+  GRADS.forEach((g, i) => {
+    const e = document.createElement('i');
+    e.style.background = g;
+    if (opts.bg === i) e.className = 'on';
+    e.onclick = () => { opts.bg = i; saveOpts(); applyBg(); };
+    sw.appendChild(e);
+  });
+  if (bgImg) {
+    const e = document.createElement('i');
+    e.style.background = 'url("' + bgImg + '") center/cover';
+    if (opts.bg === 'img') e.className = 'on';
+    e.onclick = () => { opts.bg = 'img'; saveOpts(); applyBg(); };
+    sw.appendChild(e);
+  }
+}
+$('glass').checked = !!opts.glass;
+$('glass').onchange = () => { opts.glass = $('glass').checked; saveOpts(); applyBg(); };
+$('bgPick').onclick = () => $('bgFile').click();
+$('bgFile').onchange = e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    const im = new Image();
+    im.onload = () => {
+      const k = Math.min(1, 1000 / Math.max(im.width, im.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+      c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+      bgImg = c.toDataURL('image/jpeg', 0.72);
+      try { localStorage.setItem(KEY + '_bg', bgImg); } catch (x) { alert('ছবিটা সংরক্ষণ করা যায়নি, ছোট ছবি বাছুন'); }
+      opts.glass = true; $('glass').checked = true;
+      opts.bg = 'img'; saveOpts(); applyBg();
+    };
+    im.src = r.result;
+  };
+  r.readAsDataURL(f);
+};
+applyBg();
 
 renderAll();
 </script>
