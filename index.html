@@ -80,6 +80,21 @@ body.glass input[type=text],body.glass input[type=url],body.glass input[type=sea
 #tabs button.on{color:var(--pri)}
 body.glass #tabs{-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5)}
 body.glass #tabs button.on{color:#fff;background:rgba(255,255,255,.25)}
+#br{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;background:#fff}
+#br.off{display:none}
+#brBar{display:flex;align-items:center;gap:4px;background:#1f2430;border-bottom:1px solid rgba(255,255,255,.12);padding:max(6px,env(safe-area-inset-top)) 6px 6px}
+#brBar>button{flex:none;width:38px;height:38px;padding:0;border-radius:10px;font-size:18px;background:none;box-shadow:none;color:#fff}
+#brTabs{flex:1;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+#brTabs::-webkit-scrollbar{display:none}
+.brt{flex:none;display:flex;align-items:center;gap:6px;max-width:150px;padding:7px 10px;border-radius:10px;background:rgba(255,255,255,.12);color:#fff;font-size:13px;cursor:pointer}
+.brt img{width:16px;height:16px;border-radius:4px}
+.brt span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brt b{opacity:.7;padding-left:2px}
+.brt.on{background:#fff;color:#1f2430}
+.brt.plus{padding:7px 12px;font-size:16px}
+#brHint{background:#fff8d6;color:#6b5600;font-size:12px;padding:5px 10px}
+#brFrames{flex:1;position:relative}
+#brFrames iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
 </style>
 </head>
 <body>
@@ -102,7 +117,7 @@ body.glass #tabs button.on{color:#fff;background:rgba(255,255,255,.25)}
       <button id="restore">রিস্টোর (পেস্ট)</button>
       <button id="aboutBtn">ℹ About</button>
     </div>
-    <div class="opt" style="display:block"><div style="font-weight:600;margin-bottom:10px">🎨 ব্যাকগ্রাউন্ড</div><div id="swatches" class="sw"></div><div class="bar" style="margin:12px 0 0"><button id="bgPick">🖼 গ্যালারি থেকে ছবি</button><input type="file" id="bgFile" accept="image/*" hidden></div></div>
+    <div class="opt" style="display:block"><div style="font-weight:600;margin-bottom:10px">🎨 ব্যাকগ্রাউন্ড</div><div id="swatches" class="sw"></div><div class="bar" style="margin:12px 0 0"><span style="position:relative;display:inline-block"><button id="bgPick" type="button">🖼 গ্যালারি থেকে ছবি</button><input type="file" id="bgFile" accept="image/*" style="position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></span></div></div>
     <div id="setList"></div>
   </section>
 
@@ -138,7 +153,14 @@ body.glass #tabs button.on{color:#fff;background:rgba(255,255,255,.25)}
   <button data-v="home"><b>🏠</b>হোম</button>
   <button data-v="settings"><b>⚙</b>Settings</button>
   <button data-v="about"><b>ℹ</b>About</button>
+  <button id="brOpen" style="display:none"><b>🗂</b><span>ট্যাব (<em id="tabCnt" style="font-style:normal">0</em>)</span></button>
 </nav>
+
+<div id="br" class="off">
+  <div id="brBar"><button id="brHome" type="button">🏠</button><div id="brTabs"></div><button id="brReload" type="button">⟳</button><button id="brExt" type="button">↗</button></div>
+  <div id="brHint">কিছু সাইট (Facebook, Google ইত্যাদি) ভেতরে খোলে না — তখন ↗ চাপুন। (লুকাতে এখানে ট্যাপ করুন)</div>
+  <div id="brFrames"></div>
+</div>
 
 <dialog id="dlg">
   <b id="dlgTitle"></b>
@@ -168,7 +190,7 @@ opts.same = true; opts.glass = true;
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(sites)); } catch (e) { alert('সংরক্ষণ করা যায়নি'); } };
 
 const $ = id => document.getElementById(id);
-const norm = u => { u = u.trim(); return /^https?:\/\//i.test(u) ? u : 'https://' + u; };
+const norm = u => { u = u.trim().replace(/^(https?)(:\/{0,2}|\/{1,2})(?=[^\/])/i, '$1://'); return /^https?:\/\//i.test(u) ? u : 'https://' + u; };
 const host = u => { try { return new URL(u).hostname; } catch (e) { return ''; } };
 const favUrl = s => s.img || 'https://www.google.com/s2/favicons?domain=' + host(s.url) + '&sz=128';
 
@@ -202,7 +224,7 @@ function renderHome() {
     groups[g].forEach(s => {
       const a = document.createElement('a');
       a.className = 'tile';
-      a.href = s.url;
+      a.href = norm(s.url);
       if (!opts.same) { a.target = '_blank'; a.rel = 'noopener'; }
       a.appendChild(icon(s));
       const n = document.createElement('span');
@@ -212,6 +234,7 @@ function renderHome() {
       a.addEventListener('touchstart', () => { t = setTimeout(() => { t = 'long'; openDlg(s); }, 600); }, { passive: true });
       a.addEventListener('touchend', e => { if (t === 'long') e.preventDefault(); clearTimeout(t); });
       a.addEventListener('contextmenu', e => { e.preventDefault(); openDlg(s); });
+      a.addEventListener('click', e => { e.preventDefault(); openTab(s); });
       grid.appendChild(a);
     });
     box.appendChild(grid);
@@ -327,18 +350,61 @@ function show(v, push = true) {
   if (push && v !== 'home') { if (view === 'home') history.pushState({ v }, ''); else history.replaceState({ v }, ''); }
   view = v;
   ['home', 'settings', 'about'].forEach(x => $(x).classList.toggle('hidden', x !== v));
-  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  document.querySelectorAll('#tabs button[data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === v));
   $('toggle').textContent = v === 'home' ? '⚙ Settings' : '← Home';
   $('title').textContent = v === 'home' ? 'My Web Apps' : v === 'settings' ? 'Settings' : 'About';
 }
-window.addEventListener('popstate', () => show('home', false));
+// অ্যাপের ভেতরে ক্রোমের মতো ট্যাব
+const tabsList = []; let curTab = null, brOpen = false;
+function brBadge() { const n = tabsList.length; $('brOpen').style.display = n ? '' : 'none'; $('tabCnt').textContent = n; }
+function brRender() {
+  const box = $('brTabs'); box.innerHTML = '';
+  tabsList.forEach(t => {
+    const c = document.createElement('div'); c.className = 'brt' + (t === curTab ? ' on' : '');
+    const im = document.createElement('img'); im.alt = ''; im.src = favUrl(t.site); im.onerror = () => im.remove();
+    const nm = document.createElement('span'); nm.textContent = t.site.name;
+    const x = document.createElement('b'); x.textContent = '✕';
+    x.onclick = e => { e.stopPropagation(); closeTab(t); };
+    c.append(im, nm, x); c.onclick = () => activateTab(t); box.appendChild(c);
+  });
+  const p = document.createElement('div'); p.className = 'brt plus'; p.textContent = '＋'; p.onclick = brHome; box.appendChild(p);
+  tabsList.forEach(t => t.f.style.display = t === curTab ? 'block' : 'none');
+}
+function activateTab(t) { curTab = t; brRender(); const el = $('brTabs').querySelector('.on'); if (el) el.scrollIntoView({ inline: 'center', block: 'nearest' }); }
+function brShow() { if (brOpen) return; brOpen = true; $('br').classList.remove('off'); if (!(history.state && history.state.b)) history.pushState({ b: 1 }, ''); }
+function brHide() { brOpen = false; $('br').classList.add('off'); }
+function brHome() { brHide(); }
+function openTab(site) {
+  const url = norm(site.url);
+  let t = tabsList.find(x => x.url === url);
+  if (!t) {
+    const f = document.createElement('iframe');
+    f.allow = 'camera; microphone; geolocation; clipboard-read; clipboard-write; fullscreen; autoplay';
+    f.setAttribute('allowfullscreen', '');
+    f.src = url;
+    $('brFrames').appendChild(f);
+    t = { site, url, f }; tabsList.push(t);
+  }
+  brBadge(); brShow(); activateTab(t);
+}
+function closeTab(t) {
+  const i = tabsList.indexOf(t); tabsList.splice(i, 1); t.f.remove(); brBadge();
+  if (!tabsList.length) { curTab = null; brHide(); return; }
+  activateTab(tabsList[Math.min(i, tabsList.length - 1)]);
+}
+$('brHome').onclick = brHome;
+$('brReload').onclick = () => { if (!curTab) return; try { curTab.f.contentWindow.location.reload(); } catch (e) { curTab.f.src = curTab.url; } };
+$('brExt').onclick = () => { if (curTab) window.open(curTab.url, '_blank') || (location.href = curTab.url); };
+$('brOpen').onclick = () => { if (tabsList.length) { brShow(); activateTab(curTab || tabsList[0]); } };
+$('brHint').onclick = () => $('brHint').remove();
+window.addEventListener('popstate', () => { if (brOpen) { brHide(); return; } show('home', false); });
 $('toggle').onclick = () => {
   if (view === 'home') show('settings');
   else if (history.state && history.state.v) history.back();
   else show('home', false);
 };
 $('aboutBtn').onclick = () => show('about');
-document.querySelectorAll('#tabs button').forEach(b => b.onclick = () => {
+document.querySelectorAll('#tabs button[data-v]').forEach(b => b.onclick = () => {
   const v = b.dataset.v;
   if (v === view) return;
   if (v !== 'home') show(v);
@@ -385,7 +451,6 @@ function applyBg() {
     sw.appendChild(e);
   }
 }
-$('bgPick').onclick = () => $('bgFile').click();
 $('bgFile').onchange = e => {
   const f = e.target.files[0];
   if (!f) return;
