@@ -2,494 +2,226 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Web Apps</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Browser</title>
 <meta name="theme-color" content="#5b4bf5">
 <style>
-:root{--bg:#f4f5fb;--card:#fff;--text:#171a26;--sub:#6a7083;--pri:#5b4bf5;--pri2:#8a5cf6;--line:#e7e9f3;--red:#e5484d;--shadow:0 4px 16px rgba(40,40,90,.08)}
-@media (prefers-color-scheme:dark){:root{--bg:#0f1016;--card:#1a1c26;--text:#eef0f7;--sub:#9aa1b4;--pri:#8b7dff;--pri2:#b07cff;--line:#2a2d3a;--red:#ff6b70;--shadow:0 4px 16px rgba(0,0,0,.35)}}
+:root{--bg:#f4f5fb;--card:#fff;--text:#171a26;--sub:#6a7083;--pri:#5b4bf5;--pri2:#8a5cf6;--line:#e7e9f3;--shadow:0 4px 16px rgba(40,40,90,.08)}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1016;--card:#1a1c26;--text:#eef0f7;--sub:#9aa1b4;--line:#2a2d3a;--shadow:0 4px 16px rgba(0,0,0,.35)}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-header{display:flex;align-items:center;justify-content:space-between;padding:max(16px,env(safe-area-inset-top)) 18px 20px;background:linear-gradient(135deg,#5b4bf5,#8a5cf6);color:#fff;border-radius:0 0 26px 26px;position:sticky;top:0;z-index:5;box-shadow:0 6px 20px rgba(91,75,245,.3)}
-header h1{font-size:20px;margin:0;letter-spacing:.2px}
-header button{background:rgba(255,255,255,.2);color:#fff;backdrop-filter:blur(6px)}
-button{font:inherit;font-weight:600;cursor:pointer;border:0;border-radius:12px;padding:9px 14px;background:var(--line);color:var(--text);transition:transform .15s,opacity .15s}
-button:active{transform:scale(.95)}
-button.pri{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;box-shadow:0 4px 12px rgba(91,75,245,.35)}
-button.del{color:var(--red)}
-main{padding:18px 16px 90px;max-width:900px;margin:auto}
-input[type=text],input[type=search],input[type=url]{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--text);font:inherit;margin-top:6px}
-input:focus{outline:2px solid var(--pri);border-color:transparent}
-#q{border-radius:999px;padding:13px 20px;box-shadow:var(--shadow);border:0;margin:0}
-h3{display:flex;align-items:center;gap:8px;margin:24px 0 12px;font-size:13px;letter-spacing:.5px;color:var(--sub)}
-h3::before{content:'';width:4px;height:14px;border-radius:2px;background:linear-gradient(var(--pri),var(--pri2))}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:18px 8px;margin-top:18px}
-h3+.grid{margin-top:0}
-.tile{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--text);font-size:12px;font-weight:500;gap:8px;text-align:center;-webkit-user-select:none;user-select:none;padding:6px 2px;border-radius:16px;transition:transform .15s;animation:pop .3s both}
-.tile:active{transform:scale(.92)}
-.tile span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.96)}}
-.ic{width:62px;height:62px;border-radius:18px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;overflow:hidden;font-weight:700;font-size:26px;flex:none}
-.ic img{width:100%;height:100%;object-fit:cover}
-.ic.ph{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;border:0}
-.empty{text-align:center;color:var(--sub);padding:70px 20px;line-height:1.9}
-.empty::before{content:'🌐';display:block;font-size:52px;margin-bottom:8px}
-.row{display:flex;align-items:center;gap:10px;background:var(--card);padding:10px 10px 10px 12px;border-radius:18px;margin-bottom:10px;box-shadow:var(--shadow);animation:pop .3s both}
-.row .ic{width:44px;height:44px;font-size:18px;border-radius:13px;box-shadow:none}
-.row .meta{flex:1;min-width:0}
-.row .meta b,.row .meta small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.row small{color:var(--sub);margin-top:2px}
-.row button{padding:7px 9px;font-size:14px;background:var(--bg)}
-.bar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
-dialog{border:0;border-radius:24px;padding:22px;width:min(92vw,400px);background:var(--card);color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.35)}
-dialog[open]{animation:pop .2s both}
-dialog::backdrop{background:rgba(10,10,25,.55);backdrop-filter:blur(3px)}
-dialog b{font-size:17px}
-label{display:block;font-size:13px;font-weight:600;color:var(--sub);margin-top:12px}
-.acts{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
-.hidden{display:none}
-.about{background:var(--card);border-radius:22px;padding:24px 20px;line-height:1.8;box-shadow:var(--shadow)}
-.about h2{margin:0 0 2px;text-align:center}
-.about h4{margin:20px 0 6px;color:var(--pri)}
-.about ul{margin:0;padding-left:20px}
-.about .logo{width:88px;height:88px;margin:0 auto 12px;font-size:44px;border-radius:24px;background:linear-gradient(135deg,#5b4bf5,#8a5cf6);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(91,75,245,.4)}
-.opt{display:flex;align-items:center;gap:10px;background:var(--card);padding:12px 14px;border-radius:16px;margin-bottom:14px;font-size:14px;font-weight:500;color:var(--text);box-shadow:var(--shadow)}
-.opt input{width:20px;height:20px;accent-color:var(--pri);flex:none}
-
-::placeholder{color:var(--sub);opacity:.85}
-#bgLayer{position:fixed;inset:0;z-index:-1;display:none}
-.sw{display:flex;gap:10px;flex-wrap:wrap}
-.sw i{width:38px;height:38px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .15s}
-.sw i:active{transform:scale(.9)}
-.sw i.on{border-color:#fff;box-shadow:0 0 0 3px var(--pri)}
-body.glass{--text:#fff;--sub:rgba(255,255,255,.8);--card:rgba(255,255,255,.16);--line:rgba(255,255,255,.3);--shadow:0 8px 24px rgba(0,0,0,.18);background:transparent;color:#fff}
-body.glass header{background:rgba(255,255,255,.14);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);box-shadow:none;border-bottom:1px solid var(--line)}
-body.glass .row,body.glass .opt,body.glass .about,body.glass #q,body.glass .ic{-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);border:1px solid var(--line)}
-body.glass .tile span,body.glass h3,body.glass .empty{text-shadow:0 1px 4px rgba(0,0,0,.35)}
-body.glass button{background:rgba(255,255,255,.2);color:#fff}
-body.glass button.pri{background:linear-gradient(135deg,var(--pri),var(--pri2))}
-body.glass button.del{color:#ffb4b7}
-body.glass .row button{background:rgba(255,255,255,.18)}
-body.glass .ic.ph{border:0}
-body.glass .about h4{color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.4)}
-body.glass dialog{background:rgba(35,30,70,.72);-webkit-backdrop-filter:blur(24px) saturate(1.4);backdrop-filter:blur(24px) saturate(1.4);border:1px solid rgba(255,255,255,.25);color:#fff}
-body.glass input[type=text],body.glass input[type=url],body.glass input[type=search]{border:1px solid var(--line)}
-#tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;background:var(--card);border-top:1px solid var(--line);padding:6px 8px max(6px,env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(40,40,90,.08)}
-#tabs button{flex:1;background:none;box-shadow:none;border-radius:12px;padding:8px 4px;font-size:12px;color:var(--sub);display:flex;flex-direction:column;align-items:center;gap:2px}
-#tabs button b{font-size:19px;line-height:1}
-#tabs button.on{color:var(--pri)}
-body.glass #tabs{-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5)}
-body.glass #tabs button.on{color:#fff;background:rgba(255,255,255,.25)}
-#br{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;background:#fff}
-#br.off{display:none}
-#brHead{display:flex;align-items:center;justify-content:center;padding:max(8px,env(safe-area-inset-top)) 14px 8px;background:linear-gradient(135deg,#5b4bf5,#8a5cf6);color:#fff;font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#brBar{display:flex;align-items:center;gap:4px;background:#1f2430;border-bottom:1px solid rgba(255,255,255,.12);padding:6px}
-#brBar>button{flex:none;width:38px;height:38px;padding:0;border-radius:10px;font-size:18px;background:none;box-shadow:none;color:#fff}
-#brTabs{flex:1;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
-#brTabs::-webkit-scrollbar{display:none}
-.brt{flex:none;display:flex;align-items:center;gap:6px;max-width:150px;padding:7px 10px;border-radius:10px;background:rgba(255,255,255,.12);color:#fff;font-size:13px;cursor:pointer}
-.brt img{width:16px;height:16px;border-radius:4px}
-.brt span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.brt b{opacity:.7;padding-left:2px}
-.brt.on{background:#fff;color:#1f2430}
-.brt.plus{padding:7px 12px;font-size:16px}
-#brHint{background:#fff8d6;color:#6b5600;font-size:12px;padding:5px 10px}
-#brFrames{flex:1;position:relative}
-#brFrames iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+html,body{height:100%}
+body{margin:0;display:flex;flex-direction:column;font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--text);padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+button{font:inherit;cursor:pointer;border:0;color:inherit}
+#top{display:flex;align-items:center;gap:6px;padding:8px;background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff}
+#top button{flex:none;width:38px;height:38px;border-radius:12px;font-size:18px;background:rgba(255,255,255,.2);color:#fff}
+#top button:active{transform:scale(.93)}
+#addr{flex:1;min-width:0;height:38px;border:0;border-radius:999px;padding:0 16px;font:inherit;font-size:14px;background:#fff;color:#171a26;outline:none}
+#strip{display:flex;gap:6px;overflow-x:auto;padding:6px 8px;background:#1f2430;scrollbar-width:none}
+#strip::-webkit-scrollbar{display:none}
+.tab{flex:none;display:flex;align-items:center;gap:6px;max-width:160px;padding:7px 8px 7px 10px;border-radius:10px;background:rgba(255,255,255,.12);color:#fff;font-size:13px;cursor:pointer}
+.tab img{width:16px;height:16px;border-radius:4px}
+.tab span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tab b{opacity:.7;padding:0 2px;font-weight:400}
+.tab.on{background:#fff;color:#1f2430}
+.tab.plus{padding:7px 14px;font-size:16px}
+#view{flex:1;position:relative;min-height:0}
+#frames,#ntp{position:absolute;inset:0}
+#frames iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+.nf{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;line-height:1.7;background:var(--bg)}
+.nf img{width:56px;height:56px;border-radius:14px;box-shadow:var(--shadow)}
+.pri{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;font-weight:600;padding:11px 20px;border-radius:14px;box-shadow:0 4px 12px rgba(91,75,245,.35)}
+#ntp{overflow-y:auto;padding:28px 16px 40px}
+#ntp .wrap{max-width:720px;margin:auto}
+#ntp h1{margin:0 0 18px;text-align:center;font-size:22px}
+#q{width:100%;height:46px;border:0;border-radius:999px;padding:0 20px;font:inherit;background:var(--card);color:var(--text);box-shadow:var(--shadow);outline:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:18px 8px;margin-top:26px}
+.sc{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:6px 2px;background:none;font-size:12px;font-weight:500;color:var(--text)}
+.sc:active{transform:scale(.93)}
+.sc .ic{width:62px;height:62px;border-radius:18px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:26px;font-weight:700}
+.sc .ic img{width:100%;height:100%;object-fit:cover}
+.sc span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc .x{position:absolute;top:0;right:8px;width:22px;height:22px;border-radius:50%;background:#e5484d;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center}
+.bar{display:flex;justify-content:center;margin-top:22px}
+.bar button{background:var(--card);box-shadow:var(--shadow);padding:9px 16px;border-radius:12px;font-size:13px;font-weight:600}
 </style>
 </head>
 <body>
-<div id="bgLayer"></div>
-<header>
-  <h1 id="title">My Web Apps</h1>
-  <button id="toggle">⚙ Settings</button>
-</header>
-
-<main>
-  <section id="home">
-    <input type="search" id="q" placeholder="🔍 সার্চ করুন">
-    <div id="homeList"></div>
-  </section>
-
-  <section id="settings" class="hidden">
-    <div class="bar">
-      <button class="pri" id="add">＋ URL যুক্ত করুন</button>
-      <button id="backup">ব্যাকআপ (কপি)</button>
-      <button id="restore">রিস্টোর (পেস্ট)</button>
-      <button id="aboutBtn">ℹ About</button>
+<div id="top">
+  <button id="bHome" title="হোম">🏠</button>
+  <input id="addr" type="text" inputmode="url" autocapitalize="off" autocomplete="off" placeholder="সার্চ করুন বা URL লিখুন">
+  <button id="bReload" title="রিলোড">⟳</button>
+  <button id="bExt" title="বাইরে খুলুন">↗</button>
+</div>
+<div id="strip"></div>
+<div id="view">
+  <div id="ntp">
+    <div class="wrap">
+      <h1>🌐 My Browser</h1>
+      <input id="q" type="text" placeholder="🔍 সার্চ বা URL" autocomplete="off">
+      <div class="grid" id="grid"></div>
+      <div class="bar"><button id="bEdit">✎ সম্পাদনা</button></div>
     </div>
-    <div class="opt" style="display:block"><div style="font-weight:600;margin-bottom:10px">🎨 ব্যাকগ্রাউন্ড</div><div id="swatches" class="sw"></div><div class="bar" style="margin:12px 0 0"><span style="position:relative;display:inline-block"><button id="bgPick" type="button">🖼 গ্যালারি থেকে ছবি</button><input type="file" id="bgFile" accept="image/*" style="position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></span></div></div>
-    <div id="setList"></div>
-  </section>
-
-  <section id="about" class="hidden">
-    <div class="about">
-      <div class="logo">▦</div>
-      <h2>My Web Apps</h2>
-      <div style="text-align:center;color:var(--sub)">ভার্সন 1.0.0</div>
-      <p>পছন্দের সব ওয়েবসাইট এক জায়গায়। আলাদা অ্যাপ ইনস্টল না করে Facebook, YouTube, WhatsApp, Gmail সহ যেকোনো সাইট আলাদা অ্যাপের মতো ব্যবহার করুন।</p>
-      <h4>কীভাবে ব্যবহার করবেন</h4>
-      <ul>
-        <li>⚙ Settings-এ গিয়ে "URL যুক্ত করুন" চাপুন।</li>
-        <li>সাইটের ঠিকানা লিখুন, যেমন facebook.com।</li>
-        <li>আইকন নিজে থেকে হোম পেজে যুক্ত হবে।</li>
-        <li>আইকনে চাপলে সাইট খুলবে। ফিরে আসতে ফোনের Back বাটন চাপুন।</li>
-        <li>আইকন চেপে ধরলে নাম, ছবি বা গ্রুপ বদলানো ও মুছে ফেলা যায়।</li>
-      </ul>
-      <h4>ফিচার</h4>
-      <ul>
-        <li>যত খুশি ওয়েবসাইট যুক্ত করা</li>
-        <li>গ্যালারি থেকে আইকনের ছবি বাছাই</li>
-        <li>গ্রুপ, সার্চ আর ▲▼ দিয়ে ক্রম বদলানো</li>
-        <li>ব্যাকআপ ও রিস্টোর</li>
-        <li>ডেটা সংরক্ষিত থাকে, অ্যাপ বন্ধ করে খুললেও</li>
-      </ul>
-      <h4>গোপনীয়তা</h4>
-      <p>আপনার সাইটের তালিকা শুধু এই ফোনেই সংরক্ষিত থাকে। অ্যাপ আপনার পাসওয়ার্ড বা লগইন তথ্য সংগ্রহ করে না। আইকন আনতে সাইটের নাম (ডোমেইন) Google-এর ফেভিকন সার্ভিসে পাঠানো হয়।</p>
-    </div>
-  </section>
-</main>
-
-<nav id="tabs">
-  <button data-v="home"><b>🏠</b>হোম</button>
-  <button data-v="settings"><b>⚙</b>Settings</button>
-  <button data-v="about"><b>ℹ</b>About</button>
-  <button id="brOpen" style="display:none"><b>🗂</b><span>ট্যাব (<em id="tabCnt" style="font-style:normal">0</em>)</span></button>
-</nav>
-
-<div id="br" class="off">
-  <div id="brHead">My Web Apps</div>
-  <div id="brBar"><button id="brHome" type="button">🏠</button><div id="brTabs"></div><button id="brReload" type="button">⟳</button><button id="brExt" type="button">↗</button></div>
-  <div id="brHint">কিছু সাইট (Facebook, Google ইত্যাদি) ভেতরে খোলে না — তখন ↗ চাপুন। (লুকাতে এখানে ট্যাপ করুন)</div>
-  <div id="brFrames"></div>
+  </div>
+  <div id="frames"></div>
 </div>
 
-<dialog id="dlg">
-  <b id="dlgTitle"></b>
-  <label>Website URL<input type="url" id="fUrl" placeholder="facebook.com"></label>
-  <label>নাম (ফাঁকা রাখলে অটো)<input type="text" id="fName"></label>
-  <label>গ্রুপ (যেমন: সোশ্যাল)<input type="text" id="fGroup"></label>
-  <label>আইকনের ছবি
-    <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
-      <div class="ic" id="fPrev" style="width:44px;height:44px"></div>
-      <input type="file" id="fFile" accept="image/*" style="flex:1;min-width:0">
-    </div>
-  </label>
-  <div class="acts">
-    <button class="del" id="fDel">Delete</button>
-    <button id="fCancel">বাতিল</button>
-    <button class="pri" id="fSave">সংরক্ষণ</button>
-  </div>
-</dialog>
-
 <script>
-const KEY = 'my_web_apps_v1';
-let sites = [];
-try { sites = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
-let opts = { same: true, glass: true, bg: 0 };
-try { Object.assign(opts, JSON.parse(localStorage.getItem(KEY + '_opts') || '{}')); } catch (e) {}
-opts.same = true; opts.glass = true;
-const save = () => { try { localStorage.setItem(KEY, JSON.stringify(sites)); } catch (e) { alert('সংরক্ষণ করা যায়নি'); } };
-
+const KEY = 'my_browser_v1';
 const $ = id => document.getElementById(id);
-const norm = u => { u = u.trim().replace(/^(https?)(:\/{0,2}|\/{1,2})(?=[^\/])/i, '$1://'); return /^https?:\/\//i.test(u) ? u : 'https://' + u; };
-const host = u => { try { return new URL(u).hostname; } catch (e) { return ''; } };
-const favUrl = s => s.img || 'https://www.google.com/s2/favicons?domain=' + host(s.url) + '&sz=128';
+const DEF = [
+  { n: 'Wikipedia', u: 'https://wikipedia.org' },
+  { n: 'Facebook', u: 'https://facebook.com' },
+  { n: 'YouTube', u: 'https://youtube.com' },
+  { n: 'GitHub', u: 'https://github.com' }
+];
+let sc = null;
+try { sc = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+if (!Array.isArray(sc)) sc = DEF.slice();
+const saveSc = () => { try { localStorage.setItem(KEY, JSON.stringify(sc)); } catch (e) {} };
 
-function icon(s) {
-  const d = document.createElement('div');
-  d.className = 'ic';
-  const letter = () => { d.classList.add('ph'); d.textContent = (s.name || '?')[0].toUpperCase(); };
-  const im = document.createElement('img');
-  im.alt = '';
-  im.onerror = () => { im.remove(); letter(); };
-  im.src = favUrl(s);
-  d.appendChild(im);
-  return d;
-}
+const host = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return ''; } };
+const fav = u => 'https://www.google.com/s2/favicons?domain=' + host(u) + '&sz=64';
+const norm = t => {
+  t = t.trim();
+  if (!t) return '';
+  if (/^https?:\/\//i.test(t)) return t;
+  if (!/\s/.test(t) && /\.[a-z]{2,}/i.test(t)) return 'https://' + t;
+  return 'https://duckduckgo.com/?q=' + encodeURIComponent(t);
+};
 
-function renderHome() {
-  const q = $('q').value.toLowerCase();
-  const box = $('homeList');
-  box.innerHTML = '';
-  const list = sites.filter(s => s.name.toLowerCase().includes(q));
-  if (!sites.length) {
-    box.innerHTML = '<div class="empty">কোনো ওয়েবসাইট নেই।<br>উপরে ⚙ Settings-এ গিয়ে URL যুক্ত করুন।</div>';
-    return;
+// যেসব সাইট iframe-এর ভেতরে খোলার অনুমতি দেয় না
+const NOFRAME = ['facebook.com','fb.com','messenger.com','instagram.com','google.com','gmail.com','youtube.com','youtu.be','whatsapp.com','twitter.com','x.com','linkedin.com','github.com','netflix.com','amazon.com','paypal.com','microsoft.com','live.com','outlook.com','bing.com','duckduckgo.com','reddit.com','tiktok.com','telegram.org','pinterest.com','discord.com','spotify.com','apple.com','yahoo.com','zoom.us','dropbox.com'];
+const blocked = u => { const h = host(u); return NOFRAME.some(d => h === d || h.endsWith('.' + d)); };
+const openExt = u => { window.open(u, '_blank') || (location.href = u); };
+
+// ---------- ট্যাব ----------
+let tabs = [], cur = null, uid = 0, edit = false;
+
+function makeEl(u) {
+  if (blocked(u)) {
+    const d = document.createElement('div');
+    d.className = 'nf';
+    const im = document.createElement('img'); im.alt = ''; im.src = fav(u); im.onerror = () => im.remove();
+    const p = document.createElement('div');
+    const b = document.createElement('b'); b.textContent = host(u);
+    p.append(b, ' ভেতরে খোলার অনুমতি দেয় না।');
+    const btn = document.createElement('button'); btn.className = 'pri'; btn.textContent = 'সাইটটি খুলুন ↗';
+    btn.onclick = () => openExt(u);
+    d.append(im, p, btn);
+    return d;
   }
-  const groups = {};
-  list.forEach(s => (groups[s.group || ''] = groups[s.group || ''] || []).push(s));
-  Object.keys(groups).sort((a, b) => a === '' ? -1 : b === '' ? 1 : a.localeCompare(b)).forEach(g => {
-    if (g) { const h = document.createElement('h3'); h.textContent = g; box.appendChild(h); }
-    const grid = document.createElement('div');
-    grid.className = 'grid';
-    groups[g].forEach(s => {
-      const a = document.createElement('a');
-      a.className = 'tile';
-      a.href = norm(s.url);
-      if (!opts.same) { a.target = '_blank'; a.rel = 'noopener'; }
-      a.appendChild(icon(s));
-      const n = document.createElement('span');
-      n.textContent = s.name;
-      a.appendChild(n);
-      let t;
-      a.addEventListener('touchstart', () => { t = setTimeout(() => { t = 'long'; openDlg(s); }, 600); }, { passive: true });
-      a.addEventListener('touchend', e => { if (t === 'long') e.preventDefault(); clearTimeout(t); });
-      a.addEventListener('contextmenu', e => { e.preventDefault(); openDlg(s); });
-      a.addEventListener('click', e => { e.preventDefault(); openTab(s); });
-      grid.appendChild(a);
-    });
-    box.appendChild(grid);
-  });
+  const f = document.createElement('iframe');
+  f.allow = 'camera; microphone; geolocation; clipboard-read; clipboard-write; fullscreen; autoplay';
+  f.setAttribute('allowfullscreen', '');
+  f.src = u;
+  return f;
 }
 
-function renderSettings() {
-  const box = $('setList');
-  box.innerHTML = '';
-  if (!sites.length) box.innerHTML = '<div class="empty">এখনও কিছু যুক্ত করা হয়নি</div>';
-  sites.forEach((s, i) => {
-    const r = document.createElement('div');
-    r.className = 'row';
-    r.appendChild(icon(s));
-    const m = document.createElement('div');
-    m.className = 'meta';
-    const b = document.createElement('b'); b.textContent = s.name;
-    const sm = document.createElement('small'); sm.textContent = (s.group ? s.group + ' • ' : '') + s.url;
-    m.append(b, sm);
-    r.appendChild(m);
-    const mk = (txt, fn, cls) => { const x = document.createElement('button'); x.textContent = txt; if (cls) x.className = cls; x.onclick = fn; r.appendChild(x); };
-    mk('▲', () => move(i, -1));
-    mk('▼', () => move(i, 1));
-    mk('✎', () => openDlg(s));
-    mk('🗑', () => { if (confirm('"' + s.name + '" মুছে ফেলবেন?')) { sites.splice(i, 1); save(); renderAll(); } }, 'del');
-    box.appendChild(r);
-  });
+function newTab(url) {
+  const t = { id: ++uid, url: null, title: 'নতুন ট্যাব', el: null };
+  tabs.push(t);
+  cur = t;
+  if (url) go(t, url); else render();
+  return t;
+}
+function go(t, u) {
+  t.url = u;
+  t.title = host(u) || u;
+  if (t.el) t.el.remove();
+  t.el = makeEl(u);
+  $('frames').appendChild(t.el);
+  render();
+}
+function goHome(t) {
+  if (t.el) t.el.remove();
+  t.el = null; t.url = null; t.title = 'নতুন ট্যাব';
+  render();
+}
+function select(t) { cur = t; render(); }
+function closeTab(t) {
+  const i = tabs.indexOf(t);
+  if (t.el) t.el.remove();
+  tabs.splice(i, 1);
+  if (!tabs.length) { newTab(); return; }
+  if (cur === t) cur = tabs[Math.max(0, i - 1)];
+  render();
 }
 
-function move(i, d) {
-  const j = i + d;
-  if (j < 0 || j >= sites.length) return;
-  [sites[i], sites[j]] = [sites[j], sites[i]];
-  save(); renderAll();
-}
-
-const renderAll = () => { renderHome(); renderSettings(); };
-
-// ডায়ালগ
-let editing = null, img = null;
-function showPrev() {
-  const p = $('fPrev');
-  p.innerHTML = '';
-  if (img) { const im = document.createElement('img'); im.src = img; p.appendChild(im); }
-  else p.textContent = '🌐';
-}
-function openDlg(s) {
-  editing = s || null;
-  img = s ? s.img || null : null;
-  $('dlgTitle').textContent = s ? 'এডিট করুন' : 'নতুন ওয়েবসাইট';
-  $('fUrl').value = s ? s.url : '';
-  $('fName').value = s ? s.name : '';
-  $('fGroup').value = s ? s.group || '' : '';
-  $('fFile').value = '';
-  $('fDel').style.display = s ? '' : 'none';
-  showPrev();
-  $('dlg').showModal();
-}
-$('fFile').onchange = e => {
-  const f = e.target.files[0];
-  if (!f) return;
-  const r = new FileReader();
-  r.onload = () => {
-    const im = new Image();
-    im.onload = () => {
-      const c = document.createElement('canvas');
-      c.width = c.height = 128;
-      const side = Math.min(im.width, im.height);
-      c.getContext('2d').drawImage(im, (im.width - side) / 2, (im.height - side) / 2, side, side, 0, 0, 128, 128);
-      img = c.toDataURL('image/png');
-      showPrev();
-    };
-    im.src = r.result;
-  };
-  r.readAsDataURL(f);
-};
-$('fSave').onclick = () => {
-  if (!$('fUrl').value.trim()) return;
-  const u = norm($('fUrl').value);
-  const h = host(u).replace(/^www\./, '');
-  const n = $('fName').value.trim() || h.split('.')[0] || u;
-  const g = $('fGroup').value.trim();
-  if (editing) Object.assign(editing, { url: u, name: n, group: g, img });
-  else sites.push({ id: Date.now() + '', url: u, name: n, group: g, img });
-  save(); renderAll(); $('dlg').close();
-};
-$('fCancel').onclick = () => $('dlg').close();
-$('fDel').onclick = () => {
-  if (editing && confirm('মুছে ফেলবেন?')) { sites = sites.filter(x => x !== editing); save(); renderAll(); $('dlg').close(); }
-};
-$('add').onclick = () => openDlg(null);
-
-// ব্যাকআপ / রিস্টোর
-$('backup').onclick = async () => {
-  const t = JSON.stringify(sites);
-  try { await navigator.clipboard.writeText(t); alert('ব্যাকআপ কপি হয়েছে। কোথাও সেভ রাখুন।'); }
-  catch (e) { prompt('এই লেখাটা কপি করে রাখুন:', t); }
-};
-$('restore').onclick = () => {
-  const t = prompt('ব্যাকআপের লেখাটা পেস্ট করুন:');
-  if (!t) return;
-  try {
-    const l = JSON.parse(t);
-    if (!Array.isArray(l)) throw 0;
-    sites = l; save(); renderAll();
-    alert(l.length + 'টি সাইট ফিরে এসেছে');
-  } catch (e) { alert('সঠিক ব্যাকআপ নয়'); }
-};
-
-// ভিউ বদল
-let view = 'home';
-function show(v, push = true) {
-  if (push && v !== 'home') { if (view === 'home') history.pushState({ v }, ''); else history.replaceState({ v }, ''); }
-  view = v;
-  ['home', 'settings', 'about'].forEach(x => $(x).classList.toggle('hidden', x !== v));
-  document.querySelectorAll('#tabs button[data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === v));
-  $('toggle').textContent = v === 'home' ? '⚙ Settings' : '← Home';
-  $('title').textContent = v === 'home' ? 'My Web Apps' : v === 'settings' ? 'Settings' : 'About';
-}
-
-// অ্যাপের ভেতরে ক্রোমের মতো ট্যাব
-const tabsList = []; let curTab = null, brOpen = false;
-
-// যেসব সাইট iframe-এ খোলে না, সেগুলো সরাসরি খুলবে
-const NOFRAME = ['facebook.com','fb.com','messenger.com','instagram.com','google.com','gmail.com','youtube.com','youtu.be','whatsapp.com','twitter.com','x.com','linkedin.com','github.com','netflix.com','amazon.com','paypal.com','microsoft.com','live.com','outlook.com','bing.com','reddit.com','tiktok.com','telegram.org','pinterest.com','discord.com','spotify.com','apple.com','yahoo.com','zoom.us','dropbox.com'];
-const blocked = u => { const h = host(u).replace(/^www\./, ''); return NOFRAME.some(d => h === d || h.endsWith('.' + d)); };
-
-function brBadge() { const n = tabsList.length; $('brOpen').style.display = n ? '' : 'none'; $('tabCnt').textContent = n; }
-function brRender() {
-  const box = $('brTabs'); box.innerHTML = '';
-  tabsList.forEach(t => {
-    const c = document.createElement('div'); c.className = 'brt' + (t === curTab ? ' on' : '');
-    const im = document.createElement('img'); im.alt = ''; im.src = favUrl(t.site); im.onerror = () => im.remove();
-    const nm = document.createElement('span'); nm.textContent = t.site.name;
+function render() {
+  // ট্যাব বার
+  const s = $('strip'); s.innerHTML = '';
+  tabs.forEach(t => {
+    const c = document.createElement('div');
+    c.className = 'tab' + (t === cur ? ' on' : '');
+    if (t.url) { const im = document.createElement('img'); im.alt = ''; im.src = fav(t.url); im.onerror = () => im.remove(); c.appendChild(im); }
+    const n = document.createElement('span'); n.textContent = t.title;
     const x = document.createElement('b'); x.textContent = '✕';
     x.onclick = e => { e.stopPropagation(); closeTab(t); };
-    c.append(im, nm, x); c.onclick = () => activateTab(t); box.appendChild(c);
+    c.append(n, x);
+    c.onclick = () => select(t);
+    s.appendChild(c);
   });
-  const p = document.createElement('div'); p.className = 'brt plus'; p.textContent = '＋'; p.onclick = brHome; box.appendChild(p);
-  tabsList.forEach(t => t.f.style.display = t === curTab ? 'block' : 'none');
-}
-function activateTab(t) {
-  curTab = t; brRender();
-  $('brHead').textContent = t ? t.site.name : 'My Web Apps';
-  const el = $('brTabs').querySelector('.on');
-  if (el) el.scrollIntoView({ inline: 'center', block: 'nearest' });
-}
-function brShow() { if (brOpen) return; brOpen = true; $('br').classList.remove('off'); if (!(history.state && history.state.b)) history.pushState({ b: 1 }, ''); }
-function brHide() { brOpen = false; $('br').classList.add('off'); }
-function brHome() { brHide(); }
-function openTab(site) {
-  const url = norm(site.url);
-  if (window.Android && Android.open) { Android.open(url, site.name); return; }
-  if (blocked(url)) { window.open(url, '_blank') || (location.href = url); return; }
-  let t = tabsList.find(x => x.url === url);
-  if (!t) {
-    const f = document.createElement('iframe');
-    f.allow = 'camera; microphone; geolocation; clipboard-read; clipboard-write; fullscreen; autoplay';
-    f.setAttribute('allowfullscreen', '');
-    f.src = url;
-    $('brFrames').appendChild(f);
-    t = { site, url, f }; tabsList.push(t);
-  }
-  brBadge(); brShow(); activateTab(t);
-}
-function closeTab(t) {
-  const i = tabsList.indexOf(t); tabsList.splice(i, 1); t.f.remove(); brBadge();
-  if (!tabsList.length) { curTab = null; brHide(); return; }
-  activateTab(tabsList[Math.min(i, tabsList.length - 1)]);
-}
-$('brHome').onclick = brHome;
-$('brReload').onclick = () => { if (!curTab) return; try { curTab.f.contentWindow.location.reload(); } catch (e) { curTab.f.src = curTab.url; } };
-$('brExt').onclick = () => { if (curTab) window.open(curTab.url, '_blank') || (location.href = curTab.url); };
-$('brOpen').onclick = () => { if (tabsList.length) { brShow(); activateTab(curTab || tabsList[0]); } };
-$('brHint').onclick = () => $('brHint').remove();
-window.addEventListener('popstate', () => { if (brOpen) { brHide(); return; } show('home', false); });
-$('toggle').onclick = () => {
-  if (view === 'home') show('settings');
-  else if (history.state && history.state.v) history.back();
-  else show('home', false);
-};
-$('aboutBtn').onclick = () => show('about');
-document.querySelectorAll('#tabs button[data-v]').forEach(b => b.onclick = () => {
-  const v = b.dataset.v;
-  if (v === view) return;
-  if (v !== 'home') show(v);
-  else if (history.state && history.state.v) history.back();
-  else show('home', false);
-});
-$('q').oninput = renderHome;
+  const p = document.createElement('div'); p.className = 'tab plus'; p.textContent = '＋'; p.onclick = () => newTab();
+  s.appendChild(p);
+  const on = s.querySelector('.on'); if (on) on.scrollIntoView({ inline: 'center', block: 'nearest' });
 
+  // কনটেন্ট
+  tabs.forEach(t => { if (t.el) t.el.style.display = t === cur ? '' : 'none'; });
+  $('ntp').style.display = cur && cur.url ? 'none' : '';
+  $('addr').value = cur && cur.url ? cur.url : '';
+  if (!cur.url) renderGrid();
+}
 
-// গ্লাস ও ব্যাকগ্রাউন্ড
-const GRADS = [
-  'linear-gradient(135deg,#667eea,#764ba2)',
-  'linear-gradient(135deg,#f093fb,#f5576c)',
-  'linear-gradient(135deg,#4facfe,#00c6fb)',
-  'linear-gradient(135deg,#11998e,#38ef7d)',
-  'linear-gradient(135deg,#fa709a,#fda085)',
-  'linear-gradient(135deg,#0f2027,#2c5364)',
-  'linear-gradient(135deg,#232526,#414345)'
-];
-let bgImg = '';
-try { bgImg = localStorage.getItem(KEY + '_bg') || ''; } catch (e) {}
-const saveOpts = () => { try { localStorage.setItem(KEY + '_opts', JSON.stringify(opts)); } catch (e) {} };
-function applyBg() {
-  document.body.classList.toggle('glass', !!opts.glass);
-  const L = $('bgLayer');
-  L.style.display = opts.glass ? 'block' : 'none';
-  L.style.background = (opts.bg === 'img' && bgImg)
-    ? 'linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,.28)),url("' + bgImg + '") center/cover no-repeat'
-    : (GRADS[opts.bg] || GRADS[0]);
-  const sw = $('swatches');
-  sw.innerHTML = '';
-  GRADS.forEach((g, i) => {
-    const e = document.createElement('i');
-    e.style.background = g;
-    if (opts.bg === i) e.className = 'on';
-    e.onclick = () => { opts.bg = i; saveOpts(); applyBg(); };
-    sw.appendChild(e);
+// ---------- হোম পেজের শর্টকাট ----------
+function renderGrid() {
+  const g = $('grid'); g.innerHTML = '';
+  sc.forEach((s, i) => {
+    const b = document.createElement('button'); b.className = 'sc';
+    const ic = document.createElement('div'); ic.className = 'ic';
+    const im = document.createElement('img'); im.alt = ''; im.src = fav(s.u);
+    im.onerror = () => { im.remove(); ic.textContent = (s.n || '?')[0].toUpperCase(); };
+    ic.appendChild(im);
+    const n = document.createElement('span'); n.textContent = s.n;
+    b.append(ic, n);
+    if (edit) {
+      const x = document.createElement('div'); x.className = 'x'; x.textContent = '✕';
+      b.appendChild(x);
+      b.onclick = () => { if (confirm('"' + s.n + '" মুছে ফেলবেন?')) { sc.splice(i, 1); saveSc(); renderGrid(); } };
+    } else {
+      b.onclick = () => go(cur, s.u);
+    }
+    g.appendChild(b);
   });
-  if (bgImg) {
-    const e = document.createElement('i');
-    e.style.background = 'url("' + bgImg + '") center/cover';
-    if (opts.bg === 'img') e.className = 'on';
-    e.onclick = () => { opts.bg = 'img'; saveOpts(); applyBg(); };
-    sw.appendChild(e);
-  }
-}
-$('bgFile').onchange = e => {
-  const f = e.target.files[0];
-  if (!f) return;
-  const r = new FileReader();
-  r.onload = () => {
-    const im = new Image();
-    im.onload = () => {
-      const k = Math.min(1, 1000 / Math.max(im.width, im.height));
-      const c = document.createElement('canvas');
-      c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
-      c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
-      bgImg = c.toDataURL('image/jpeg', 0.72);
-      try { localStorage.setItem(KEY + '_bg', bgImg); } catch (x) { alert('ছবিটা সংরক্ষণ করা যায়নি, ছোট ছবি বাছুন'); }
-      opts.glass = true;
-      opts.bg = 'img'; saveOpts(); applyBg();
-    };
-    im.src = r.result;
+  const a = document.createElement('button'); a.className = 'sc';
+  const ai = document.createElement('div'); ai.className = 'ic'; ai.textContent = '＋';
+  const an = document.createElement('span'); an.textContent = 'যুক্ত করুন';
+  a.append(ai, an);
+  a.onclick = () => {
+    const t = prompt('ওয়েবসাইটের URL (যেমন: wikipedia.org):');
+    if (!t || !t.trim()) return;
+    const u = /^https?:\/\//i.test(t.trim()) ? t.trim() : 'https://' + t.trim();
+    const n = (prompt('নাম:', host(u).split('.')[0]) || host(u)).trim();
+    sc.push({ n, u }); saveSc(); renderGrid();
   };
-  r.readAsDataURL(f);
-};
-applyBg();
+  g.appendChild(a);
+  $('bEdit').textContent = edit ? '✓ শেষ' : '✎ সম্পাদনা';
+}
 
-renderAll();
-show('home', false);
+// ---------- বাটন ও ইনপুট ----------
+function submit(v) { const u = norm(v); if (u) go(cur, u); }
+$('addr').addEventListener('keydown', e => { if (e.key === 'Enter') { e.target.blur(); submit(e.target.value); } });
+$('addr').addEventListener('focus', e => e.target.select());
+$('q').addEventListener('keydown', e => { if (e.key === 'Enter') { e.target.blur(); submit(e.target.value); e.target.value = ''; } });
+$('bHome').onclick = () => goHome(cur);
+$('bReload').onclick = () => {
+  if (!cur || !cur.url) return;
+  const u = cur.url;
+  go(cur, u);
+};
+$('bExt').onclick = () => { if (cur && cur.url) openExt(cur.url); };
+$('bEdit').onclick = () => { edit = !edit; renderGrid(); };
+
+newTab();
 </script>
 </body>
-  </html>
+</html>
