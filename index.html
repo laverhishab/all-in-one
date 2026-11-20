@@ -82,7 +82,8 @@ body.glass #tabs{-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filte
 body.glass #tabs button.on{color:#fff;background:rgba(255,255,255,.25)}
 #br{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;background:#fff}
 #br.off{display:none}
-#brBar{display:flex;align-items:center;gap:4px;background:#1f2430;border-bottom:1px solid rgba(255,255,255,.12);padding:max(6px,env(safe-area-inset-top)) 6px 6px}
+#brHead{display:flex;align-items:center;justify-content:center;padding:max(8px,env(safe-area-inset-top)) 14px 8px;background:linear-gradient(135deg,#5b4bf5,#8a5cf6);color:#fff;font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#brBar{display:flex;align-items:center;gap:4px;background:#1f2430;border-bottom:1px solid rgba(255,255,255,.12);padding:6px}
 #brBar>button{flex:none;width:38px;height:38px;padding:0;border-radius:10px;font-size:18px;background:none;box-shadow:none;color:#fff}
 #brTabs{flex:1;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 #brTabs::-webkit-scrollbar{display:none}
@@ -157,6 +158,7 @@ body.glass #tabs button.on{color:#fff;background:rgba(255,255,255,.25)}
 </nav>
 
 <div id="br" class="off">
+  <div id="brHead">My Web Apps</div>
   <div id="brBar"><button id="brHome" type="button">🏠</button><div id="brTabs"></div><button id="brReload" type="button">⟳</button><button id="brExt" type="button">↗</button></div>
   <div id="brHint">কিছু সাইট (Facebook, Google ইত্যাদি) ভেতরে খোলে না — তখন ↗ চাপুন। (লুকাতে এখানে ট্যাপ করুন)</div>
   <div id="brFrames"></div>
@@ -354,8 +356,14 @@ function show(v, push = true) {
   $('toggle').textContent = v === 'home' ? '⚙ Settings' : '← Home';
   $('title').textContent = v === 'home' ? 'My Web Apps' : v === 'settings' ? 'Settings' : 'About';
 }
+
 // অ্যাপের ভেতরে ক্রোমের মতো ট্যাব
 const tabsList = []; let curTab = null, brOpen = false;
+
+// যেসব সাইট iframe-এ খোলে না, সেগুলো সরাসরি খুলবে
+const NOFRAME = ['facebook.com','fb.com','messenger.com','instagram.com','google.com','gmail.com','youtube.com','youtu.be','whatsapp.com','twitter.com','x.com','linkedin.com','github.com','netflix.com','amazon.com','paypal.com','microsoft.com','live.com','outlook.com','bing.com','reddit.com','tiktok.com','telegram.org','pinterest.com','discord.com','spotify.com','apple.com','yahoo.com','zoom.us','dropbox.com'];
+const blocked = u => { const h = host(u).replace(/^www\./, ''); return NOFRAME.some(d => h === d || h.endsWith('.' + d)); };
+
 function brBadge() { const n = tabsList.length; $('brOpen').style.display = n ? '' : 'none'; $('tabCnt').textContent = n; }
 function brRender() {
   const box = $('brTabs'); box.innerHTML = '';
@@ -370,12 +378,19 @@ function brRender() {
   const p = document.createElement('div'); p.className = 'brt plus'; p.textContent = '＋'; p.onclick = brHome; box.appendChild(p);
   tabsList.forEach(t => t.f.style.display = t === curTab ? 'block' : 'none');
 }
-function activateTab(t) { curTab = t; brRender(); const el = $('brTabs').querySelector('.on'); if (el) el.scrollIntoView({ inline: 'center', block: 'nearest' }); }
+function activateTab(t) {
+  curTab = t; brRender();
+  $('brHead').textContent = t ? t.site.name : 'My Web Apps';
+  const el = $('brTabs').querySelector('.on');
+  if (el) el.scrollIntoView({ inline: 'center', block: 'nearest' });
+}
 function brShow() { if (brOpen) return; brOpen = true; $('br').classList.remove('off'); if (!(history.state && history.state.b)) history.pushState({ b: 1 }, ''); }
 function brHide() { brOpen = false; $('br').classList.add('off'); }
 function brHome() { brHide(); }
 function openTab(site) {
   const url = norm(site.url);
+  if (window.Android && Android.open) { Android.open(url, site.name); return; }
+  if (blocked(url)) { window.open(url, '_blank') || (location.href = url); return; }
   let t = tabsList.find(x => x.url === url);
   if (!t) {
     const f = document.createElement('iframe');
@@ -477,4 +492,4 @@ renderAll();
 show('home', false);
 </script>
 </body>
-</html>
+  </html>
